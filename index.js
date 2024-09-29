@@ -1,10 +1,14 @@
 require('dotenv').config();
 
-const {handle_data} = require('./middleware/handle_data');
+const {getFilteredInvoices, createNewInvoice} = require('./middleware/handle_data');
+const bodyParser = require('body-parser');
+
+const jsonParser = bodyParser.json();
 
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const {readFileSync} = require("node:fs");
 
 const port = process.env.SERVER_PORT;
 
@@ -16,8 +20,20 @@ const corsOption = {
 
 app.use(cors(corsOption));
 
+app.post('/new-invoice', jsonParser, (req, res) => {
+    if (!req.body) return res.send({
+        message: 'ERROR: No data have been received.',
+    });
+
+    const result = createNewInvoice(req.body);
+
+    res.send({
+        message: result === true ? 'SUCCESS: New invoice added to the list' : 'ERROR: New invoice have not been added to the list',
+    });
+});
+
 app.get('/', (req, res) => {
-    const retrievedData = handle_data(
+    const retrievedData = getFilteredInvoices(
         req.query.invoiceNumber,
         req.query.invoiceSender,
         req.query.invoiceReceiver,
