@@ -25,9 +25,9 @@ exports.getFilteredInvoices = (
 
 exports.createNewInvoice = (invoiceData) => {
     try {
-        const invoiceData = JSON.parse(fs.readFileSync('data/data.json', 'utf8'))
+        const invoicesList = JSON.parse(fs.readFileSync('data/data.json', 'utf8'))
 
-        invoiceData[`${invoiceData.invoiceNumberElem}`] = {
+        invoicesList[`${invoiceData.invoiceNumberElem}`] = {
             "Отправитель": {
                 "Цех": `'${invoiceData.invoiceSenderElem}'`,
                 "участок Цеха": ""
@@ -40,7 +40,7 @@ exports.createNewInvoice = (invoiceData) => {
             "Выдано": {}
         }
 
-        const data = JSON.stringify(invoiceData, null, 2)
+        const data = JSON.stringify(invoicesList, null, 2)
 
         try {
             fs.writeFileSync('data/data.json', data)

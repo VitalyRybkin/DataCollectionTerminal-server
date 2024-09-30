@@ -28,7 +28,7 @@ app.post('/new-invoice', jsonParser, (req, res) => {
     const result = createNewInvoice(req.body);
 
     res.send({
-        message: result === true ? 'SUCCESS: New invoice added to the list' : 'ERROR: New invoice have not been added to the list',
+        message: result === true ? 'SUCCESS' : 'ERROR',
     });
 });
 
